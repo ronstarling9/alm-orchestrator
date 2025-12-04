@@ -35,7 +35,7 @@ class Daemon:
 
         # Auto-discover and register all actions
         self._router = discover_actions(prompts_dir)
-        logger.info(f"Discovered {self._router.action_count} action(s)")
+        logger.info(f"Discovered {self._router.action_count} action(s): {', '.join(self._router.action_names)}")
 
         # Setup signal handlers
         signal.signal(signal.SIGINT, self._handle_signal)
