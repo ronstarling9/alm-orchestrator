@@ -1,4 +1,4 @@
-# ALM Orchestrator
+# Application Lifecycle Management (ALM) Orchestrator
 
 A Python daemon that integrates Jira, Claude Code, and GitHub to automate AI-powered development workflows. Add an AI label to a Jira issue, and the orchestrator will invoke Claude Code to analyze, fix, or implement the request.
 
