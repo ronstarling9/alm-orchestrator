@@ -2,11 +2,10 @@
 """ALM Orchestrator - Jira + Claude Code + GitHub integration daemon."""
 
 import argparse
-import json
 import logging
 import os
 import sys
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -15,23 +14,8 @@ from alm_orchestrator.config import Config, ConfigError
 from alm_orchestrator.daemon import Daemon
 
 
-class JSONFormatter(logging.Formatter):
-    """Format log records as JSON for structured logging."""
-
-    def format(self, record):
-        log_data = {
-            "timestamp": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
-            "level": record.levelname,
-            "logger": record.name,
-            "message": record.getMessage(),
-        }
-        if record.exc_info:
-            log_data["exception"] = self.formatException(record.exc_info)
-        return json.dumps(log_data)
-
-
 def setup_logging(verbose: bool = False, logs_dir: str = "logs") -> None:
-    """Configure dual logging: console + structured JSON file.
+    """Configure dual logging: console + CSV file.
 
     Args:
         verbose: If True, console shows DEBUG level.
@@ -42,25 +26,28 @@ def setup_logging(verbose: bool = False, logs_dir: str = "logs") -> None:
 
     # Generate log filename with timestamp
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    log_file = Path(logs_dir) / f"run-{timestamp}.json"
+    log_file = Path(logs_dir) / f"run-{timestamp}.csv"
 
     # Root logger configuration
     root_logger = logging.getLogger()
     root_logger.setLevel(logging.DEBUG)  # Capture all, handlers filter
 
-    # Console handler - human readable
+    # Console handler - CSV format for easy review
     console_handler = logging.StreamHandler()
     console_handler.setLevel(logging.DEBUG if verbose else logging.INFO)
     console_handler.setFormatter(logging.Formatter(
-        "%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S"
+        "%(asctime)s,%(levelname)s,%(name)s,%(message)s",
+        datefmt="%H:%M:%S"
     ))
     root_logger.addHandler(console_handler)
 
-    # File handler - JSON structured, DEBUG level
+    # File handler - CSV format, DEBUG level
     file_handler = logging.FileHandler(log_file)
     file_handler.setLevel(logging.DEBUG)
-    file_handler.setFormatter(JSONFormatter())
+    file_handler.setFormatter(logging.Formatter(
+        "%(asctime)s,%(levelname)s,%(name)s,%(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S"
+    ))
     root_logger.addHandler(file_handler)
 
     logging.info(f"Logging to: {log_file}")
