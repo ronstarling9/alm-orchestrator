@@ -10,11 +10,11 @@ from alm_orchestrator.config import Config
 def mock_config():
     return Config(
         jira_url="https://test.atlassian.net",
-        jira_user="test@example.com",
-        jira_api_token="test-token",
         jira_project_key="TEST",
         github_token="ghp_test",
         github_repo="acme-corp/recipe-api",
+        jira_client_id="test-client-id",
+        jira_client_secret="test-client-secret",
         anthropic_api_key="sk-ant-test",
     )
 

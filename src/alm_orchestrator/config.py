@@ -15,11 +15,11 @@ class Config:
     """Immutable configuration for the orchestrator."""
 
     jira_url: str
-    jira_user: str
-    jira_api_token: str
     jira_project_key: str
     github_token: str
     github_repo: str
+    jira_client_id: str
+    jira_client_secret: str
     poll_interval_seconds: int = 30
     anthropic_api_key: Optional[str] = None
 
@@ -42,9 +42,9 @@ class Config:
         """
         required = [
             "JIRA_URL",
-            "JIRA_USER",
-            "JIRA_API_TOKEN",
             "JIRA_PROJECT_KEY",
+            "JIRA_CLIENT_ID",
+            "JIRA_CLIENT_SECRET",
             "GITHUB_TOKEN",
             "GITHUB_REPO",
         ]
@@ -61,9 +61,9 @@ class Config:
 
         return cls(
             jira_url=os.environ["JIRA_URL"],
-            jira_user=os.environ["JIRA_USER"],
-            jira_api_token=os.environ["JIRA_API_TOKEN"],
             jira_project_key=os.environ["JIRA_PROJECT_KEY"],
+            jira_client_id=os.environ["JIRA_CLIENT_ID"],
+            jira_client_secret=os.environ["JIRA_CLIENT_SECRET"],
             github_token=os.environ["GITHUB_TOKEN"],
             github_repo=os.environ["GITHUB_REPO"],
             poll_interval_seconds=poll_interval_int,

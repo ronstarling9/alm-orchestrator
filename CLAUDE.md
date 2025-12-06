@@ -79,7 +79,17 @@ Actions use different tool profiles:
 ### Configuration
 
 Environment variables loaded from `.env`:
-- `JIRA_URL`, `JIRA_USER`, `JIRA_API_TOKEN`, `JIRA_PROJECT_KEY`
-- `GITHUB_TOKEN`, `GITHUB_REPO`
+- `JIRA_URL`, `JIRA_PROJECT_KEY` - Jira instance URL and project key
+- `JIRA_CLIENT_ID`, `JIRA_CLIENT_SECRET` - OAuth 2.0 credentials for service account
+- `GITHUB_TOKEN`, `GITHUB_REPO` - GitHub PAT and repo in `owner/repo` format
 - `ANTHROPIC_API_KEY` (optional if using Vertex AI)
 - `POLL_INTERVAL_SECONDS` (default: 30)
+
+#### Creating Jira OAuth 2.0 Credentials
+
+1. Go to [admin.atlassian.com](https://admin.atlassian.com)
+2. Navigate to **Directory > Service accounts**
+3. Select your service account
+4. Click **Create credentials** → **OAuth 2.0**
+5. Select scopes: `read:jira-work`, `write:jira-work`
+6. Save the Client ID and Client Secret (cannot be retrieved later)

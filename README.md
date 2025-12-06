@@ -25,7 +25,7 @@ A Python daemon that integrates Jira, Claude Code, and GitHub to automate AI-pow
 
 - Python 3.12+
 - [Claude Code CLI](https://claude.ai/code) installed and authenticated
-- Jira Cloud account with API access
+- Jira Cloud with a service account and OAuth 2.0 credentials
 - GitHub account with repo access
 
 ## Installation
@@ -49,13 +49,22 @@ Required environment variables:
 | Variable | Description |
 |----------|-------------|
 | `JIRA_URL` | Your Jira instance URL (e.g., `https://your-domain.atlassian.net`) |
-| `JIRA_USER` | Jira account email |
-| `JIRA_API_TOKEN` | Jira API token ([create one here](https://id.atlassian.com/manage-profile/security/api-tokens)) |
 | `JIRA_PROJECT_KEY` | Project key to poll (e.g., `DEMO`) |
+| `JIRA_CLIENT_ID` | OAuth 2.0 Client ID for service account |
+| `JIRA_CLIENT_SECRET` | OAuth 2.0 Client Secret for service account |
 | `GITHUB_TOKEN` | GitHub personal access token with repo access |
 | `GITHUB_REPO` | Repository in `owner/repo` format |
 | `ANTHROPIC_API_KEY` | Anthropic API key (optional if using Vertex AI) |
 | `POLL_INTERVAL_SECONDS` | How often to poll Jira (default: 30) |
+
+### Creating Jira OAuth 2.0 Credentials
+
+1. Go to [admin.atlassian.com](https://admin.atlassian.com)
+2. Navigate to **Directory > Service accounts**
+3. Create or select a service account
+4. Click **Create credentials** → **OAuth 2.0**
+5. Select scopes: `read:jira-work`, `write:jira-work`
+6. Save the Client ID and Client Secret (cannot be retrieved later)
 
 ## Usage
 

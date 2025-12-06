@@ -6,8 +6,8 @@ from alm_orchestrator.config import Config, ConfigError
 class TestConfig:
     def test_loads_from_environment(self, monkeypatch):
         monkeypatch.setenv("JIRA_URL", "https://test.atlassian.net")
-        monkeypatch.setenv("JIRA_USER", "test@example.com")
-        monkeypatch.setenv("JIRA_API_TOKEN", "test-token")
+        monkeypatch.setenv("JIRA_CLIENT_ID", "test-client-id")
+        monkeypatch.setenv("JIRA_CLIENT_SECRET", "test-client-secret")
         monkeypatch.setenv("JIRA_PROJECT_KEY", "TEST")
         monkeypatch.setenv("GITHUB_TOKEN", "ghp_test")
         monkeypatch.setenv("GITHUB_REPO", "owner/repo")
@@ -16,8 +16,8 @@ class TestConfig:
         config = Config.from_env()
 
         assert config.jira_url == "https://test.atlassian.net"
-        assert config.jira_user == "test@example.com"
-        assert config.jira_api_token == "test-token"
+        assert config.jira_client_id == "test-client-id"
+        assert config.jira_client_secret == "test-client-secret"
         assert config.jira_project_key == "TEST"
         assert config.github_token == "ghp_test"
         assert config.github_repo == "owner/repo"
@@ -26,8 +26,8 @@ class TestConfig:
 
     def test_custom_poll_interval(self, monkeypatch):
         monkeypatch.setenv("JIRA_URL", "https://test.atlassian.net")
-        monkeypatch.setenv("JIRA_USER", "test@example.com")
-        monkeypatch.setenv("JIRA_API_TOKEN", "test-token")
+        monkeypatch.setenv("JIRA_CLIENT_ID", "test-client-id")
+        monkeypatch.setenv("JIRA_CLIENT_SECRET", "test-client-secret")
         monkeypatch.setenv("JIRA_PROJECT_KEY", "TEST")
         monkeypatch.setenv("GITHUB_TOKEN", "ghp_test")
         monkeypatch.setenv("GITHUB_REPO", "owner/repo")
@@ -40,7 +40,7 @@ class TestConfig:
 
     def test_raises_on_missing_required(self, monkeypatch):
         # Clear all env vars
-        for key in ["JIRA_URL", "JIRA_USER", "JIRA_API_TOKEN", "JIRA_PROJECT_KEY",
+        for key in ["JIRA_URL", "JIRA_CLIENT_ID", "JIRA_CLIENT_SECRET", "JIRA_PROJECT_KEY",
                     "GITHUB_TOKEN", "GITHUB_REPO"]:
             monkeypatch.delenv(key, raising=False)
 
@@ -51,8 +51,8 @@ class TestConfig:
 
     def test_repo_owner_and_name_parsing(self, monkeypatch):
         monkeypatch.setenv("JIRA_URL", "https://test.atlassian.net")
-        monkeypatch.setenv("JIRA_USER", "test@example.com")
-        monkeypatch.setenv("JIRA_API_TOKEN", "test-token")
+        monkeypatch.setenv("JIRA_CLIENT_ID", "test-client-id")
+        monkeypatch.setenv("JIRA_CLIENT_SECRET", "test-client-secret")
         monkeypatch.setenv("JIRA_PROJECT_KEY", "TEST")
         monkeypatch.setenv("GITHUB_TOKEN", "ghp_test")
         monkeypatch.setenv("GITHUB_REPO", "acme-corp/recipe-api")
@@ -65,8 +65,8 @@ class TestConfig:
 
     def test_anthropic_api_key_is_optional(self, monkeypatch):
         monkeypatch.setenv("JIRA_URL", "https://test.atlassian.net")
-        monkeypatch.setenv("JIRA_USER", "test@example.com")
-        monkeypatch.setenv("JIRA_API_TOKEN", "test-token")
+        monkeypatch.setenv("JIRA_CLIENT_ID", "test-client-id")
+        monkeypatch.setenv("JIRA_CLIENT_SECRET", "test-client-secret")
         monkeypatch.setenv("JIRA_PROJECT_KEY", "TEST")
         monkeypatch.setenv("GITHUB_TOKEN", "ghp_test")
         monkeypatch.setenv("GITHUB_REPO", "owner/repo")

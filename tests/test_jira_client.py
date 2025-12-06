@@ -1,6 +1,6 @@
 import pytest
-from unittest.mock import Mock, MagicMock
-from alm_orchestrator.jira_client import JiraClient
+from unittest.mock import Mock, MagicMock, patch
+from alm_orchestrator.jira_client import JiraClient, OAuthTokenManager
 from alm_orchestrator.config import Config
 
 
@@ -8,11 +8,11 @@ from alm_orchestrator.config import Config
 def mock_config():
     return Config(
         jira_url="https://test.atlassian.net",
-        jira_user="test@example.com",
-        jira_api_token="test-token",
         jira_project_key="TEST",
         github_token="ghp_test",
         github_repo="owner/repo",
+        jira_client_id="test-client-id",
+        jira_client_secret="test-client-secret",
         anthropic_api_key="sk-ant-test",
     )
 
@@ -20,17 +20,23 @@ def mock_config():
 class TestJiraClient:
     def test_initialization(self, mock_config, mocker):
         mock_jira_class = mocker.patch("alm_orchestrator.jira_client.JIRA")
+        mocker.patch.object(OAuthTokenManager, "get_token", return_value="mock-access-token")
+        mocker.patch.object(OAuthTokenManager, "get_api_url", return_value="https://api.atlassian.com/ex/jira/mock-cloud-id")
 
         client = JiraClient(mock_config)
+        # Trigger lazy initialization
+        client._get_jira()
 
         mock_jira_class.assert_called_once_with(
-            server="https://test.atlassian.net",
-            basic_auth=("test@example.com", "test-token"),
+            server="https://api.atlassian.com/ex/jira/mock-cloud-id",
+            token_auth="mock-access-token",
         )
 
     def test_fetch_issues_with_ai_labels(self, mock_config, mocker):
         mock_jira = MagicMock()
         mocker.patch("alm_orchestrator.jira_client.JIRA", return_value=mock_jira)
+        mocker.patch.object(OAuthTokenManager, "get_token", return_value="mock-access-token")
+        mocker.patch.object(OAuthTokenManager, "get_api_url", return_value="https://api.atlassian.com/ex/jira/mock-cloud-id")
 
         mock_issue = MagicMock()
         mock_issue.key = "TEST-123"
@@ -52,6 +58,7 @@ class TestJiraClient:
     def test_get_ai_labels_for_issue(self, mock_config, mocker):
         mock_jira = MagicMock()
         mocker.patch("alm_orchestrator.jira_client.JIRA", return_value=mock_jira)
+        mocker.patch.object(OAuthTokenManager, "get_token", return_value="mock-access-token")
 
         mock_issue = MagicMock()
         mock_issue.fields.labels = ["ai-investigate", "ai-impact", "bug", "priority-high"]
@@ -64,6 +71,7 @@ class TestJiraClient:
 
     def test_ai_label_constants(self, mock_config, mocker):
         mocker.patch("alm_orchestrator.jira_client.JIRA")
+        mocker.patch.object(OAuthTokenManager, "get_token", return_value="mock-access-token")
         client = JiraClient(mock_config)
 
         assert "ai-investigate" in client.AI_LABELS
@@ -79,6 +87,8 @@ class TestJiraClientUpdates:
     def test_add_label(self, mock_config, mocker):
         mock_jira = MagicMock()
         mocker.patch("alm_orchestrator.jira_client.JIRA", return_value=mock_jira)
+        mocker.patch.object(OAuthTokenManager, "get_token", return_value="mock-access-token")
+        mocker.patch.object(OAuthTokenManager, "get_api_url", return_value="https://api.atlassian.com/ex/jira/mock-cloud-id")
 
         mock_issue = MagicMock()
         mock_issue.key = "TEST-123"
@@ -97,6 +107,8 @@ class TestJiraClientUpdates:
     def test_add_comment(self, mock_config, mocker):
         mock_jira = MagicMock()
         mocker.patch("alm_orchestrator.jira_client.JIRA", return_value=mock_jira)
+        mocker.patch.object(OAuthTokenManager, "get_token", return_value="mock-access-token")
+        mocker.patch.object(OAuthTokenManager, "get_api_url", return_value="https://api.atlassian.com/ex/jira/mock-cloud-id")
 
         client = JiraClient(mock_config)
         client.add_comment("TEST-123", "AI analysis complete:\n\nRoot cause identified.")
@@ -109,6 +121,8 @@ class TestJiraClientUpdates:
     def test_remove_label(self, mock_config, mocker):
         mock_jira = MagicMock()
         mocker.patch("alm_orchestrator.jira_client.JIRA", return_value=mock_jira)
+        mocker.patch.object(OAuthTokenManager, "get_token", return_value="mock-access-token")
+        mocker.patch.object(OAuthTokenManager, "get_api_url", return_value="https://api.atlassian.com/ex/jira/mock-cloud-id")
 
         mock_issue = MagicMock()
         mock_issue.key = "TEST-123"
@@ -129,6 +143,8 @@ class TestJiraClientUpdates:
     def test_remove_label_not_present(self, mock_config, mocker):
         mock_jira = MagicMock()
         mocker.patch("alm_orchestrator.jira_client.JIRA", return_value=mock_jira)
+        mocker.patch.object(OAuthTokenManager, "get_token", return_value="mock-access-token")
+        mocker.patch.object(OAuthTokenManager, "get_api_url", return_value="https://api.atlassian.com/ex/jira/mock-cloud-id")
 
         mock_issue = MagicMock()
         mock_issue.key = "TEST-123"
