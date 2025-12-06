@@ -73,5 +73,5 @@ Actions use different tool profiles:
 Environment variables loaded from `.env`:
 - `JIRA_URL`, `JIRA_USER`, `JIRA_API_TOKEN`, `JIRA_PROJECT_KEY`
 - `GITHUB_TOKEN`, `GITHUB_REPO`
-- `ANTHROPIC_API_KEY`
+- `ANTHROPIC_API_KEY` (optional if using Vertex AI)
 - `POLL_INTERVAL_SECONDS` (default: 30)

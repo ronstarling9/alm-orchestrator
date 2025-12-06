@@ -54,7 +54,7 @@ Required environment variables:
 | `JIRA_PROJECT_KEY` | Project key to poll (e.g., `DEMO`) |
 | `GITHUB_TOKEN` | GitHub personal access token with repo access |
 | `GITHUB_REPO` | Repository in `owner/repo` format |
-| `ANTHROPIC_API_KEY` | Anthropic API key for Claude |
+| `ANTHROPIC_API_KEY` | Anthropic API key (optional if using Vertex AI) |
 | `POLL_INTERVAL_SECONDS` | How often to poll Jira (default: 30) |
 
 ## Usage

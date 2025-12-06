@@ -2,6 +2,7 @@
 
 import os
 from dataclasses import dataclass
+from typing import Optional
 
 
 class ConfigError(Exception):
@@ -19,8 +20,8 @@ class Config:
     jira_project_key: str
     github_token: str
     github_repo: str
-    anthropic_api_key: str
     poll_interval_seconds: int = 30
+    anthropic_api_key: Optional[str] = None
 
     @property
     def github_owner(self) -> str:
@@ -46,7 +47,6 @@ class Config:
             "JIRA_PROJECT_KEY",
             "GITHUB_TOKEN",
             "GITHUB_REPO",
-            "ANTHROPIC_API_KEY",
         ]
 
         missing = [key for key in required if not os.getenv(key)]
@@ -66,6 +66,6 @@ class Config:
             jira_project_key=os.environ["JIRA_PROJECT_KEY"],
             github_token=os.environ["GITHUB_TOKEN"],
             github_repo=os.environ["GITHUB_REPO"],
-            anthropic_api_key=os.environ["ANTHROPIC_API_KEY"],
             poll_interval_seconds=poll_interval_int,
+            anthropic_api_key=os.getenv("ANTHROPIC_API_KEY"),
         )
