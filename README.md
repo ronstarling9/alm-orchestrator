@@ -71,6 +71,8 @@ Required environment variables:
 | `GITHUB_REPO` | Repository in `owner/repo` format |
 | `ANTHROPIC_API_KEY` | Anthropic API key (optional if using Vertex AI) |
 | `POLL_INTERVAL_SECONDS` | How often to poll Jira (default: 30) |
+| `ATLASSIAN_TOKEN_URL` | OAuth token endpoint (default: `https://auth.atlassian.com/oauth/token`) |
+| `ATLASSIAN_RESOURCES_URL` | Accessible resources endpoint (default: `https://api.atlassian.com/oauth/token/accessible-resources`) |
 
 ### Creating Jira OAuth 2.0 Credentials
 
