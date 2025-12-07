@@ -1,9 +1,13 @@
 """Claude Code CLI executor for the ALM Orchestrator."""
 
 import json
+import logging
 import subprocess
+import time
 from dataclasses import dataclass
 from typing import Optional
+
+logger = logging.getLogger(__name__)
 
 
 class ClaudeExecutorError(Exception):
@@ -68,6 +72,13 @@ class ClaudeExecutor:
             "--output-format", "json",              # Structured output
         ]
 
+        logger.debug(
+            f"Executing Claude Code CLI: claude -p <prompt> "
+            f"--permission-mode acceptEdits --allowedTools {tools} "
+            f"--output-format json (cwd={work_dir}, timeout={self._timeout}s)"
+        )
+
+        start_time = time.monotonic()
         try:
             result = subprocess.run(
                 cmd,
@@ -80,6 +91,9 @@ class ClaudeExecutor:
             raise ClaudeExecutorError(
                 f"Claude Code timed out after {self._timeout} seconds"
             ) from e
+        finally:
+            elapsed = time.monotonic() - start_time
+            logger.debug(f"Claude Code CLI completed in {elapsed:.1f}s")
 
         if result.returncode != 0:
             error_msg = result.stderr or result.stdout or "Unknown error"
