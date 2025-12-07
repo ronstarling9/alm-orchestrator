@@ -1,3 +1,5 @@
+> **For Claude:** Use superpowers:test-driven-development for this implementation. Write failing tests first, then implement to make them pass.
+
 # Feature Implementation
 
 ## Jira Ticket

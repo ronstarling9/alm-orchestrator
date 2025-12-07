@@ -1,3 +1,5 @@
+> **For Claude:** Use superpowers:systematic-debugging to investigate this issue. Follow the four-phase framework: root cause investigation, pattern analysis, hypothesis testing, then findings.
+
 # Root Cause Investigation
 
 ## Jira Ticket

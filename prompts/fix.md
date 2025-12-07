@@ -1,3 +1,5 @@
+> **For Claude:** Use superpowers:test-driven-development for this fix. Write a failing test first, then implement the minimal fix to make it pass.
+
 # Bug Fix Implementation
 
 ## Jira Ticket
