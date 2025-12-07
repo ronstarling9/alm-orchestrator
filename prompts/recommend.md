@@ -6,6 +6,8 @@
 ## Description
 {issue_description}
 
+{investigation_section}
+
 ## Your Task
 
 Propose 2-3 approaches to address this issue. Do not write code, just describe the options.
