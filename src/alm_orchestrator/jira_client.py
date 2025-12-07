@@ -263,14 +263,15 @@ class JiraClient:
             current_labels.remove(label)
             issue.update(fields={"labels": current_labels})
 
-    def get_comments(self, issue_key: str) -> List[str]:
-        """Get comment bodies for an issue, sorted newest-first.
+    def get_comments(self, issue_key: str) -> List[dict]:
+        """Get comments for an issue, sorted newest-first.
 
         Args:
             issue_key: The issue key (e.g., "TEST-123").
 
         Returns:
-            List of comment body strings, ordered from newest to oldest.
+            List of comment dicts with body, author_id, and created fields,
+            ordered from newest to oldest.
         """
         issue = self._get_jira().issue(issue_key, fields="comment")
         comments = issue.fields.comment.comments
@@ -279,4 +280,11 @@ class JiraClient:
             key=lambda c: c.created,
             reverse=True
         )
-        return [c.body for c in sorted_comments]
+        return [
+            {
+                "body": c.body,
+                "author_id": c.author.accountId,
+                "created": c.created,
+            }
+            for c in sorted_comments
+        ]

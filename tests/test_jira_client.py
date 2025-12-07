@@ -185,25 +185,31 @@ class TestJiraClientUpdates:
 class TestJiraClientComments:
     """Tests for comment-related methods."""
 
-    def test_get_comments_returns_bodies_newest_first(self, mock_config, mocker):
-        """Test that get_comments returns comment bodies sorted newest-first."""
+    def test_get_comments_returns_dicts_newest_first(self, mock_config, mocker):
+        """Test that get_comments returns comment dicts sorted newest-first."""
         mock_jira = MagicMock()
+        mock_myself = MagicMock()
+        mock_myself.__getitem__ = lambda self, key: "mock-account-id" if key == "accountId" else None
+        mock_jira.myself.return_value = mock_myself
         mocker.patch("alm_orchestrator.jira_client.JIRA", return_value=mock_jira)
         mocker.patch.object(OAuthTokenManager, "get_token", return_value="mock-access-token")
         mocker.patch.object(OAuthTokenManager, "get_api_url", return_value="https://api.atlassian.com/ex/jira/mock-cloud-id")
 
-        # Create mock comments with created timestamps
+        # Create mock comments with created timestamps and authors
         mock_comment_1 = MagicMock()
         mock_comment_1.body = "First comment"
         mock_comment_1.created = "2024-01-01T10:00:00.000+0000"
+        mock_comment_1.author.accountId = "author-1"
 
         mock_comment_2 = MagicMock()
         mock_comment_2.body = "Second comment"
         mock_comment_2.created = "2024-01-02T10:00:00.000+0000"
+        mock_comment_2.author.accountId = "author-2"
 
         mock_comment_3 = MagicMock()
         mock_comment_3.body = "Third comment"
         mock_comment_3.created = "2024-01-03T10:00:00.000+0000"
+        mock_comment_3.author.accountId = "author-3"
 
         # Mock issue with comments in arbitrary order
         mock_issue = MagicMock()
@@ -213,13 +219,19 @@ class TestJiraClientComments:
         client = JiraClient(mock_config)
         result = client.get_comments("TEST-123")
 
-        # Should be sorted newest-first
-        assert result == ["Third comment", "Second comment", "First comment"]
+        # Should be sorted newest-first and include metadata
+        assert len(result) == 3
+        assert result[0] == {"body": "Third comment", "author_id": "author-3", "created": "2024-01-03T10:00:00.000+0000"}
+        assert result[1] == {"body": "Second comment", "author_id": "author-2", "created": "2024-01-02T10:00:00.000+0000"}
+        assert result[2] == {"body": "First comment", "author_id": "author-1", "created": "2024-01-01T10:00:00.000+0000"}
         mock_jira.issue.assert_called_once_with("TEST-123", fields="comment")
 
     def test_get_comments_returns_empty_list_when_no_comments(self, mock_config, mocker):
         """Test that get_comments returns empty list when issue has no comments."""
         mock_jira = MagicMock()
+        mock_myself = MagicMock()
+        mock_myself.__getitem__ = lambda self, key: "mock-account-id" if key == "accountId" else None
+        mock_jira.myself.return_value = mock_myself
         mocker.patch("alm_orchestrator.jira_client.JIRA", return_value=mock_jira)
         mocker.patch.object(OAuthTokenManager, "get_token", return_value="mock-access-token")
         mocker.patch.object(OAuthTokenManager, "get_api_url", return_value="https://api.atlassian.com/ex/jira/mock-cloud-id")
