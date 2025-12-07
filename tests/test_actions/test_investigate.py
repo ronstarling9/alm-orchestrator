@@ -37,12 +37,13 @@ class TestInvestigateAction:
         # Verify clone happened
         mock_github.clone_repo.assert_called_once()
 
-        # Verify Claude was invoked with correct template
+        # Verify Claude was invoked with correct template and action
         mock_claude.execute_with_template.assert_called_once()
         call_kwargs = mock_claude.execute_with_template.call_args[1]
         assert call_kwargs["work_dir"] == "/tmp/work-dir"
         assert "investigate.md" in call_kwargs["template_path"]
         assert call_kwargs["context"]["issue_key"] == "TEST-123"
+        assert call_kwargs["action"] == "investigate"
 
         # Verify comment was posted to Jira
         mock_jira.add_comment.assert_called_once()

@@ -38,6 +38,11 @@ class TestCodeReviewAction:
         action = CodeReviewAction(prompts_dir="/tmp/prompts")
         result = action.execute(mock_issue, mock_jira, mock_github, mock_claude)
 
+        # Verify Claude was invoked with correct action
+        mock_claude.execute_with_template.assert_called_once()
+        call_kwargs = mock_claude.execute_with_template.call_args[1]
+        assert call_kwargs["action"] == "code_review"
+
         # Verify PR comment was posted
         mock_github.add_pr_comment.assert_called_once()
         pr_number, comment = mock_github.add_pr_comment.call_args[0]

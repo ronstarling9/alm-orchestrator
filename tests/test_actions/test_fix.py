@@ -39,6 +39,11 @@ class TestFixAction:
         action = FixAction(prompts_dir="/tmp/prompts")
         result = action.execute(mock_issue, mock_jira, mock_github, mock_claude)
 
+        # Verify Claude was invoked with correct action
+        mock_claude.execute_with_template.assert_called_once()
+        call_kwargs = mock_claude.execute_with_template.call_args[1]
+        assert call_kwargs["action"] == "fix"
+
         # Verify branch was created
         mock_github.create_branch.assert_called_once()
         branch_name = mock_github.create_branch.call_args[0][1]
