@@ -1,11 +1,15 @@
 # Security Review
 
 ## Context
-Reviewing changes in this repository for security vulnerabilities.
+Reviewing pull request changes for security vulnerabilities.
+
+## Changed Files
+Review ONLY these files that were modified in the pull request:
+{changed_files}
 
 ## Your Task
 
-Perform a security-focused review checking for:
+Read each of the files listed above and perform a security-focused review checking for:
 
 1. **Injection vulnerabilities** - SQL, command, XSS, etc.
 2. **Authentication/Authorization** - Proper access controls?
@@ -13,6 +17,8 @@ Perform a security-focused review checking for:
 4. **Input validation** - All inputs properly validated?
 5. **Dependencies** - Known vulnerable dependencies?
 6. **OWASP Top 10** - Any of the common vulnerabilities?
+
+IMPORTANT: Only review the files listed above. Do not review other files in the repository.
 
 ## Output Format
 

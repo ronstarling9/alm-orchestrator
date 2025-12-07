@@ -20,10 +20,12 @@ class TestCodeReviewAction:
         mock_jira = MagicMock()
         mock_jira.get_comments.return_value = []
 
-        mock_pr = MagicMock()
-        mock_pr.number = 42
-
         mock_github = MagicMock()
+        mock_github.get_pr_info.return_value = {
+            "head_branch": "feature/fix-recipes",
+            "base_branch": "main",
+            "changed_files": ["src/recipes.py", "tests/test_recipes.py"],
+        }
         mock_github.clone_repo.return_value = "/tmp/work-dir"
 
         mock_result = ClaudeResult(
@@ -38,10 +40,18 @@ class TestCodeReviewAction:
         action = CodeReviewAction(prompts_dir="/tmp/prompts")
         result = action.execute(mock_issue, mock_jira, mock_github, mock_claude)
 
-        # Verify Claude was invoked with correct action
+        # Verify PR info was fetched
+        mock_github.get_pr_info.assert_called_once_with(42)
+
+        # Verify repo was cloned with PR's head branch
+        mock_github.clone_repo.assert_called_once_with(branch="feature/fix-recipes")
+
+        # Verify Claude was invoked with correct action and changed files
         mock_claude.execute_with_template.assert_called_once()
         call_kwargs = mock_claude.execute_with_template.call_args[1]
         assert call_kwargs["action"] == "code_review"
+        assert "src/recipes.py" in call_kwargs["context"]["changed_files"]
+        assert "tests/test_recipes.py" in call_kwargs["context"]["changed_files"]
 
         # Verify PR comment was posted
         mock_github.add_pr_comment.assert_called_once()
@@ -102,6 +112,11 @@ class TestCodeReviewPRInComments:
     @pytest.fixture
     def mock_github_client(self):
         client = MagicMock()
+        client.get_pr_info.return_value = {
+            "head_branch": "feature/test-branch",
+            "base_branch": "main",
+            "changed_files": ["src/test.py"],
+        }
         client.clone_repo.return_value = "/tmp/workdir"
         return client
 

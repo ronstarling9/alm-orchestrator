@@ -46,15 +46,26 @@ class SecurityReviewAction(BaseAction):
             jira_client.remove_label(issue_key, self.label)
             return f"No PR found for {issue_key}"
 
-        work_dir = github_client.clone_repo()
+        # Get PR info including head branch and changed files
+        pr_info = github_client.get_pr_info(pr_number)
+        changed_files = pr_info["changed_files"]
+
+        # Clone the PR's head branch to review the actual changes
+        work_dir = github_client.clone_repo(branch=pr_info["head_branch"])
 
         try:
+            # Format changed files list for the prompt
+            changed_files_text = "\n".join(f"- {f}" for f in changed_files)
+
             # Run Claude for security review (read-only tools)
             template_path = os.path.join(self._prompts_dir, "security_review.md")
             result = claude_executor.execute_with_template(
                 work_dir=work_dir,
                 template_path=template_path,
-                context={"issue_key": issue_key},
+                context={
+                    "issue_key": issue_key,
+                    "changed_files": changed_files_text,
+                },
                 action="security_review",
             )
 

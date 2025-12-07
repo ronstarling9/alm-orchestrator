@@ -158,3 +158,28 @@ class TestGitHubClientPR:
         pr = client.get_pr_by_branch("nonexistent-branch")
 
         assert pr is None
+
+    def test_get_pr_info(self, mock_config, mocker):
+        mock_github = MagicMock()
+        mock_repo = MagicMock()
+        mock_pr = MagicMock()
+        mock_pr.head.ref = "feature/add-user-auth"
+        mock_pr.base.ref = "main"
+
+        mock_file1 = MagicMock()
+        mock_file1.filename = "src/auth.py"
+        mock_file2 = MagicMock()
+        mock_file2.filename = "tests/test_auth.py"
+        mock_pr.get_files.return_value = [mock_file1, mock_file2]
+
+        mock_repo.get_pull.return_value = mock_pr
+        mock_github.get_repo.return_value = mock_repo
+        mocker.patch("alm_orchestrator.github_client.Github", return_value=mock_github)
+
+        client = GitHubClient(mock_config)
+        pr_info = client.get_pr_info(42)
+
+        assert pr_info["head_branch"] == "feature/add-user-auth"
+        assert pr_info["base_branch"] == "main"
+        assert pr_info["changed_files"] == ["src/auth.py", "tests/test_auth.py"]
+        mock_repo.get_pull.assert_called_once_with(42)

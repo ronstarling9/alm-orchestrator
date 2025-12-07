@@ -1,17 +1,23 @@
 # Code Review
 
 ## Context
-Reviewing changes in this repository for quality and correctness.
+Reviewing pull request changes for quality and correctness.
+
+## Changed Files
+Review ONLY these files that were modified in the pull request:
+{changed_files}
 
 ## Your Task
 
-Perform a thorough code review focusing on:
+Read each of the files listed above and perform a thorough code review focusing on:
 
 1. **Correctness** - Does the code do what it claims?
 2. **Design** - Is the approach sound? Are there better alternatives?
 3. **Readability** - Is the code clear and well-organized?
 4. **Testing** - Are there adequate tests? Are edge cases covered?
 5. **Performance** - Any obvious performance issues?
+
+IMPORTANT: Only review the files listed above. Do not review other files in the repository.
 
 ## Output Format
 
