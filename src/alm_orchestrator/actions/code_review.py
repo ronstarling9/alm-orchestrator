@@ -38,7 +38,8 @@ class CodeReviewAction(BaseAction):
         if not pr_number:
             jira_client.add_comment(
                 issue_key,
-                "## AI Code Review Failed\n\n"
+                "CODE REVIEW FAILED\n"
+                "==================\n\n"
                 "Could not find PR number in issue description or comments. "
                 "Please include the PR URL or number."
             )
@@ -58,13 +59,15 @@ class CodeReviewAction(BaseAction):
             )
 
             # Post review as PR comment
-            comment = f"## AI Code Review\n\n{result.content}"
+            comment = f"CODE REVIEW\n{'=' * 11}\n\n{result.content}"
             github_client.add_pr_comment(pr_number, comment)
 
             # Notify in Jira
             jira_client.add_comment(
                 issue_key,
-                f"## AI Code Review Complete\n\nReview posted to PR #{pr_number}"
+                f"CODE REVIEW COMPLETE\n"
+                f"====================\n\n"
+                f"Review posted to PR #{pr_number}"
             )
             jira_client.remove_label(issue_key, self.label)
 

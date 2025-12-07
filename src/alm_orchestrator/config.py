@@ -22,6 +22,8 @@ class Config:
     jira_client_secret: str
     poll_interval_seconds: int = 30
     anthropic_api_key: Optional[str] = None
+    atlassian_token_url: str = "https://auth.atlassian.com/oauth/token"
+    atlassian_resources_url: str = "https://api.atlassian.com/oauth/token/accessible-resources"
 
     @property
     def github_owner(self) -> str:
@@ -68,4 +70,12 @@ class Config:
             github_repo=os.environ["GITHUB_REPO"],
             poll_interval_seconds=poll_interval_int,
             anthropic_api_key=os.getenv("ANTHROPIC_API_KEY"),
+            atlassian_token_url=os.getenv(
+                "ATLASSIAN_TOKEN_URL",
+                "https://auth.atlassian.com/oauth/token"
+            ),
+            atlassian_resources_url=os.getenv(
+                "ATLASSIAN_RESOURCES_URL",
+                "https://api.atlassian.com/oauth/token/accessible-resources"
+            ),
         )

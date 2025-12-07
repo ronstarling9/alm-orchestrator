@@ -15,14 +15,16 @@ Perform a thorough code review focusing on:
 
 ## Output Format
 
-### Summary
+IMPORTANT: Use plain text only. Do not use Markdown formatting (no #, *, -, ` characters for formatting).
+
+SUMMARY
 [Overall assessment - Approve/Request Changes]
 
-### High Priority Issues
+HIGH PRIORITY ISSUES
 [Issues that must be fixed before merging]
 
-### Low Priority Suggestions
+LOW PRIORITY SUGGESTIONS
 [Nice-to-haves that could be addressed later]
 
-### What's Good
+WHAT'S GOOD
 [Positive observations about the code]

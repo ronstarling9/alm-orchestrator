@@ -38,7 +38,8 @@ class SecurityReviewAction(BaseAction):
         if not pr_number:
             jira_client.add_comment(
                 issue_key,
-                "## AI Security Review Failed\n\n"
+                "SECURITY REVIEW FAILED\n"
+                "======================\n\n"
                 "Could not find PR number in issue description or comments. "
                 "Please include the PR URL or number."
             )
@@ -57,12 +58,14 @@ class SecurityReviewAction(BaseAction):
                 allowed_tools=ClaudeExecutor.TOOLS_READONLY,
             )
 
-            comment = f"## AI Security Review\n\n{result.content}"
+            comment = f"SECURITY REVIEW\n{'=' * 15}\n\n{result.content}"
             github_client.add_pr_comment(pr_number, comment)
 
             jira_client.add_comment(
                 issue_key,
-                f"## AI Security Review Complete\n\nReview posted to PR #{pr_number}"
+                f"SECURITY REVIEW COMPLETE\n"
+                f"========================\n\n"
+                f"Review posted to PR #{pr_number}"
             )
             jira_client.remove_label(issue_key, self.label)
 

@@ -11,14 +11,20 @@ from alm_orchestrator.config import Config
 class OAuthTokenManager:
     """Manages OAuth 2.0 access tokens for Atlassian service accounts."""
 
-    TOKEN_URL = "https://auth.atlassian.com/oauth/token"
-    RESOURCES_URL = "https://api.atlassian.com/oauth/token/accessible-resources"
     # Refresh token 5 minutes before expiry
     REFRESH_BUFFER_SECONDS = 300
 
-    def __init__(self, client_id: str, client_secret: str):
+    def __init__(
+        self,
+        client_id: str,
+        client_secret: str,
+        token_url: str,
+        resources_url: str,
+    ):
         self._client_id = client_id
         self._client_secret = client_secret
+        self._token_url = token_url
+        self._resources_url = resources_url
         self._access_token: Optional[str] = None
         self._expires_at: Optional[float] = None
         self._cloud_id: Optional[str] = None
@@ -55,7 +61,7 @@ class OAuthTokenManager:
     def _refresh_token(self) -> None:
         """Fetch a new access token using client credentials."""
         response = requests.post(
-            self.TOKEN_URL,
+            self._token_url,
             data={
                 "grant_type": "client_credentials",
                 "client_id": self._client_id,
@@ -76,7 +82,7 @@ class OAuthTokenManager:
     def _fetch_cloud_id(self) -> None:
         """Fetch the cloud ID from accessible resources."""
         response = requests.get(
-            self.RESOURCES_URL,
+            self._resources_url,
             headers={
                 "Authorization": f"Bearer {self._access_token}",
                 "Accept": "application/json",
@@ -115,8 +121,10 @@ class JiraClient:
         """
         self._config = config
         self._token_manager = OAuthTokenManager(
-            config.jira_client_id,
-            config.jira_client_secret,
+            client_id=config.jira_client_id,
+            client_secret=config.jira_client_secret,
+            token_url=config.atlassian_token_url,
+            resources_url=config.atlassian_resources_url,
         )
         self._jira: Optional[JIRA] = None
 

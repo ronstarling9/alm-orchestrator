@@ -17,15 +17,17 @@ Analyze the potential impact of changes to address this issue.
 
 ## Output Format
 
-### Files That Would Change
-- `path/to/file.java` - [what changes needed]
+IMPORTANT: Use plain text only. Do not use Markdown formatting (no #, *, -, ` characters for formatting).
 
-### Dependent Code
-- `path/to/dependent.java` - [how it's affected]
+FILES THAT WOULD CHANGE
+* path/to/file.java - [what changes needed]
 
-### Test Impact
-- Existing tests: [list tests that would need updating]
-- New tests needed: [describe coverage gaps]
+DEPENDENT CODE
+* path/to/dependent.java - [how it's affected]
 
-### Risk Assessment
+TEST IMPACT
+Existing tests: [list tests that would need updating]
+New tests needed: [describe coverage gaps]
+
+RISK ASSESSMENT
 [Low/Medium/High] - [explanation of risks and mitigation]

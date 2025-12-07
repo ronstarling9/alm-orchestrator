@@ -24,7 +24,9 @@ Fix this bug following TDD principles:
 
 ## When Done
 
+IMPORTANT: Use plain text only. Do not use Markdown formatting (no #, *, -, ` characters for formatting).
+
 Summarize:
-- What files you changed
-- What the fix does
-- How to verify it works
+* What files you changed
+* What the fix does
+* How to verify it works

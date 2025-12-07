@@ -17,16 +17,18 @@ Investigate this issue and identify the root cause. You have access to the full 
 
 ## Output Format
 
+IMPORTANT: Use plain text only. Do not use Markdown formatting (no #, *, -, ` characters for formatting).
+
 Provide your findings in this format:
 
-### Summary
+SUMMARY
 [One paragraph explaining the root cause]
 
-### Files Involved
-- `path/to/file.java:line` - [what this file does]
+FILES INVOLVED
+* path/to/file.java:line - [what this file does]
 
-### Root Cause
+ROOT CAUSE
 [Detailed explanation of what's wrong and why]
 
-### Evidence
+EVIDENCE
 [Code snippets or log analysis that supports your conclusion]

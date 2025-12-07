@@ -24,7 +24,9 @@ Implement this feature following TDD principles:
 
 ## When Done
 
+IMPORTANT: Use plain text only. Do not use Markdown formatting (no #, *, -, ` characters for formatting).
+
 Summarize:
-- What files you created/changed
-- How the feature works
-- How to test it manually
+* What files you created/changed
+* How the feature works
+* How to test it manually

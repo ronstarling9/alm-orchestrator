@@ -43,7 +43,7 @@ class ImpactAction(BaseAction):
                 allowed_tools=ClaudeExecutor.TOOLS_READONLY,
             )
 
-            comment = f"## AI Impact Analysis\n\n{result.content}"
+            comment = f"IMPACT ANALYSIS\n{'=' * 15}\n\n{result.content}"
             jira_client.add_comment(issue_key, comment)
             jira_client.remove_label(issue_key, self.label)
 

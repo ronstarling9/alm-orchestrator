@@ -66,7 +66,8 @@ class ImplementAction(BaseAction):
             )
 
             comment = (
-                f"## AI Implementation Created\n\n"
+                f"IMPLEMENTATION CREATED\n"
+                f"======================\n\n"
                 f"Pull Request: {pr.html_url}\n\n"
                 f"Review the changes and merge when ready."
             )

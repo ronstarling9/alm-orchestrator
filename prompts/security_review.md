@@ -16,14 +16,16 @@ Perform a security-focused review checking for:
 
 ## Output Format
 
-### Summary
+IMPORTANT: Use plain text only. Do not use Markdown formatting (no #, *, -, ` characters for formatting).
+
+SUMMARY
 [Overall security assessment]
 
-### High Priority Findings
+HIGH PRIORITY FINDINGS
 [Security issues that must be fixed - include severity and remediation]
 
-### Low Priority Findings
+LOW PRIORITY FINDINGS
 [Minor security improvements]
 
-### Security Recommendations
+SECURITY RECOMMENDATIONS
 [General hardening suggestions]

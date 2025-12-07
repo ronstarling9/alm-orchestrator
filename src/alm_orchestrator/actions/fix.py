@@ -68,7 +68,8 @@ class FixAction(BaseAction):
 
             # Post PR link to Jira
             comment = (
-                f"## AI Fix Created\n\n"
+                f"FIX CREATED\n"
+                f"===========\n\n"
                 f"Pull Request: {pr.html_url}\n\n"
                 f"Review the changes and merge when ready."
             )

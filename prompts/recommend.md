@@ -17,20 +17,22 @@ For each approach:
 
 ## Output Format
 
-### Option 1: [Name]
-**Description:** [What this approach does]
+IMPORTANT: Use plain text only. Do not use Markdown formatting (no #, *, -, ` characters for formatting).
 
-**Pros:**
-- [advantage 1]
-- [advantage 2]
+OPTION 1: [Name]
+Description: [What this approach does]
 
-**Cons:**
-- [disadvantage 1]
+Pros:
+* [advantage 1]
+* [advantage 2]
 
-**Complexity:** [Low/Medium/High]
+Cons:
+* [disadvantage 1]
 
-### Option 2: [Name]
+Complexity: [Low/Medium/High]
+
+OPTION 2: [Name]
 ...
 
-### Recommendation
+RECOMMENDATION
 [Which option you recommend and why]
