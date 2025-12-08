@@ -72,7 +72,7 @@ class FixAction(BaseAction):
                 body=(
                     f"## Summary\n\n"
                     f"Fixes {issue_key}: {summary}\n\n"
-                    f"## AI Implementation\n\n"
+                    f"## Implementation\n\n"
                     f"{result.content}"
                 )
             )

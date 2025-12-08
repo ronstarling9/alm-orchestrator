@@ -72,7 +72,7 @@ class ImplementAction(BaseAction):
                     f"Implements {issue_key}: {summary}\n\n"
                     f"## Description\n\n"
                     f"{description}\n\n"
-                    f"## AI Implementation\n\n"
+                    f"## Implementation\n\n"
                     f"{result.content}"
                 )
             )
