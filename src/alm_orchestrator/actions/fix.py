@@ -1,8 +1,10 @@
 """Fix action handler for bug fixes that create PRs."""
 
+import logging
 import os
 from alm_orchestrator.actions.base import BaseAction
 
+logger = logging.getLogger(__name__)
 
 # Branch and commit conventions for fixes
 BRANCH_PREFIX_FIX = "fix-"
@@ -32,6 +34,11 @@ class FixAction(BaseAction):
         summary = issue.fields.summary
         description = issue.fields.description or ""
 
+        # Check for prior analysis results
+        prior_analysis_section = self._build_prior_analysis_section(
+            issue_key, jira_client
+        )
+
         # Clone and create branch
         work_dir = github_client.clone_repo()
         branch_name = f"{BRANCH_PREFIX_FIX}{issue_key.lower()}"
@@ -48,6 +55,7 @@ class FixAction(BaseAction):
                     "issue_key": issue_key,
                     "issue_summary": summary,
                     "issue_description": description,
+                    "prior_analysis_section": prior_analysis_section,
                 },
                 action="fix",
             )
@@ -85,3 +93,39 @@ class FixAction(BaseAction):
 
         finally:
             github_client.cleanup(work_dir)
+
+    def _build_prior_analysis_section(self, issue_key: str, jira_client) -> str:
+        """Build the prior analysis section from investigation and recommendation.
+
+        Args:
+            issue_key: The issue key (e.g., "TEST-123").
+            jira_client: JiraClient for fetching comments.
+
+        Returns:
+            Formatted prior analysis section, or empty string if none found.
+        """
+        sections = []
+
+        # Fetch investigation context
+        investigation_comment = jira_client.get_investigation_comment(issue_key)
+        if investigation_comment:
+            sections.append(
+                "## Prior Investigation\n\n"
+                "The following investigation was already performed on this issue:\n\n"
+                f"{investigation_comment}"
+            )
+        else:
+            logger.info(f"No investigation comment found for {issue_key}")
+
+        # Fetch recommendation context
+        recommendation_comment = jira_client.get_recommendation_comment(issue_key)
+        if recommendation_comment:
+            sections.append(
+                "## Recommendations\n\n"
+                "The following recommendations were provided:\n\n"
+                f"{recommendation_comment}"
+            )
+        else:
+            logger.info(f"No recommendation comment found for {issue_key}")
+
+        return "\n\n".join(sections)

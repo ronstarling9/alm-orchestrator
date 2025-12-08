@@ -89,3 +89,190 @@ class TestFixAction:
 
         # Cleanup should still happen
         mock_github.cleanup.assert_called_once_with("/tmp/work-dir")
+
+    def test_execute_includes_both_contexts(self, mocker):
+        """Test that both investigation and recommendation context are passed to Claude."""
+        mock_issue = MagicMock()
+        mock_issue.key = "TEST-123"
+        mock_issue.fields.summary = "Fix the bug"
+        mock_issue.fields.description = "Description here"
+
+        mock_jira = MagicMock()
+        mock_jira.get_investigation_comment.return_value = (
+            "INVESTIGATION RESULTS\n====================\n\nRoot cause is Y."
+        )
+        mock_jira.get_recommendation_comment.return_value = (
+            "RECOMMENDATIONS\n===============\n\nOption 1: Do X."
+        )
+
+        mock_github = MagicMock()
+        mock_github.clone_repo.return_value = "/tmp/work-dir"
+
+        mock_pr = MagicMock()
+        mock_pr.html_url = "https://github.com/org/repo/pull/42"
+        mock_github.create_pull_request.return_value = mock_pr
+
+        mock_result = ClaudeResult(
+            content="Fixed the bug by...",
+            cost_usd=0.05,
+            duration_ms=5000,
+            session_id="test-session"
+        )
+        mock_claude = MagicMock()
+        mock_claude.execute_with_template.return_value = mock_result
+
+        action = FixAction(prompts_dir="/tmp/prompts")
+        result = action.execute(mock_issue, mock_jira, mock_github, mock_claude)
+
+        # Verify both contexts were passed
+        call_kwargs = mock_claude.execute_with_template.call_args[1]
+        context = call_kwargs["context"]
+        assert "prior_analysis_section" in context
+        assert "Root cause is Y" in context["prior_analysis_section"]
+        assert "Option 1: Do X" in context["prior_analysis_section"]
+        assert "## Prior Investigation" in context["prior_analysis_section"]
+        assert "## Recommendations" in context["prior_analysis_section"]
+
+    def test_execute_with_only_investigation(self, mocker, caplog):
+        """Test that fix works with only investigation context."""
+        import logging
+        caplog.set_level(logging.INFO)
+
+        mock_issue = MagicMock()
+        mock_issue.key = "TEST-123"
+        mock_issue.fields.summary = "Fix the bug"
+        mock_issue.fields.description = "Description here"
+
+        mock_jira = MagicMock()
+        mock_jira.get_investigation_comment.return_value = (
+            "INVESTIGATION RESULTS\n====================\n\nRoot cause is Y."
+        )
+        mock_jira.get_recommendation_comment.return_value = None
+
+        mock_github = MagicMock()
+        mock_github.clone_repo.return_value = "/tmp/work-dir"
+
+        mock_pr = MagicMock()
+        mock_pr.html_url = "https://github.com/org/repo/pull/42"
+        mock_github.create_pull_request.return_value = mock_pr
+
+        mock_result = ClaudeResult(
+            content="Fixed the bug by...",
+            cost_usd=0.05,
+            duration_ms=5000,
+            session_id="test-session"
+        )
+        mock_claude = MagicMock()
+        mock_claude.execute_with_template.return_value = mock_result
+
+        action = FixAction(prompts_dir="/tmp/prompts")
+        result = action.execute(mock_issue, mock_jira, mock_github, mock_claude)
+
+        # Verify investigation context was passed
+        call_kwargs = mock_claude.execute_with_template.call_args[1]
+        context = call_kwargs["context"]
+        assert "Root cause is Y" in context["prior_analysis_section"]
+        assert "## Recommendations" not in context["prior_analysis_section"]
+
+        # Verify info log was emitted for missing recommendation
+        assert any(
+            "No recommendation comment found" in record.message
+            and "TEST-123" in record.message
+            for record in caplog.records
+        )
+
+    def test_execute_with_only_recommendation(self, mocker, caplog):
+        """Test that fix works with only recommendation context."""
+        import logging
+        caplog.set_level(logging.INFO)
+
+        mock_issue = MagicMock()
+        mock_issue.key = "TEST-123"
+        mock_issue.fields.summary = "Fix the bug"
+        mock_issue.fields.description = "Description here"
+
+        mock_jira = MagicMock()
+        mock_jira.get_investigation_comment.return_value = None
+        mock_jira.get_recommendation_comment.return_value = (
+            "RECOMMENDATIONS\n===============\n\nOption 1: Do X."
+        )
+
+        mock_github = MagicMock()
+        mock_github.clone_repo.return_value = "/tmp/work-dir"
+
+        mock_pr = MagicMock()
+        mock_pr.html_url = "https://github.com/org/repo/pull/42"
+        mock_github.create_pull_request.return_value = mock_pr
+
+        mock_result = ClaudeResult(
+            content="Fixed the bug by...",
+            cost_usd=0.05,
+            duration_ms=5000,
+            session_id="test-session"
+        )
+        mock_claude = MagicMock()
+        mock_claude.execute_with_template.return_value = mock_result
+
+        action = FixAction(prompts_dir="/tmp/prompts")
+        result = action.execute(mock_issue, mock_jira, mock_github, mock_claude)
+
+        # Verify recommendation context was passed
+        call_kwargs = mock_claude.execute_with_template.call_args[1]
+        context = call_kwargs["context"]
+        assert "Option 1: Do X" in context["prior_analysis_section"]
+        assert "## Prior Investigation" not in context["prior_analysis_section"]
+
+        # Verify info log was emitted for missing investigation
+        assert any(
+            "No investigation comment found" in record.message
+            and "TEST-123" in record.message
+            for record in caplog.records
+        )
+
+    def test_execute_without_prior_analysis(self, mocker, caplog):
+        """Test that fix works without any prior analysis."""
+        import logging
+        caplog.set_level(logging.INFO)
+
+        mock_issue = MagicMock()
+        mock_issue.key = "TEST-123"
+        mock_issue.fields.summary = "Fix the bug"
+        mock_issue.fields.description = "Description here"
+
+        mock_jira = MagicMock()
+        mock_jira.get_investigation_comment.return_value = None
+        mock_jira.get_recommendation_comment.return_value = None
+
+        mock_github = MagicMock()
+        mock_github.clone_repo.return_value = "/tmp/work-dir"
+
+        mock_pr = MagicMock()
+        mock_pr.html_url = "https://github.com/org/repo/pull/42"
+        mock_github.create_pull_request.return_value = mock_pr
+
+        mock_result = ClaudeResult(
+            content="Fixed the bug by...",
+            cost_usd=0.05,
+            duration_ms=5000,
+            session_id="test-session"
+        )
+        mock_claude = MagicMock()
+        mock_claude.execute_with_template.return_value = mock_result
+
+        action = FixAction(prompts_dir="/tmp/prompts")
+        result = action.execute(mock_issue, mock_jira, mock_github, mock_claude)
+
+        # Verify empty prior analysis section was passed
+        call_kwargs = mock_claude.execute_with_template.call_args[1]
+        context = call_kwargs["context"]
+        assert context["prior_analysis_section"] == ""
+
+        # Verify info logs were emitted for both missing
+        assert any(
+            "No investigation comment found" in record.message
+            for record in caplog.records
+        )
+        assert any(
+            "No recommendation comment found" in record.message
+            for record in caplog.records
+        )
