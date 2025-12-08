@@ -63,7 +63,7 @@ class FixAction(BaseAction):
 
             # Commit and push changes
             commit_message = f"{COMMIT_PREFIX_FIX}{summary}\n\nJira: {issue_key}"
-            github_client.commit_and_push(work_dir, branch_name, commit_message)
+            github_client.commit_and_push(work_dir, branch_name, commit_message, issue_key)
 
             # Create PR
             pr = github_client.create_pull_request(

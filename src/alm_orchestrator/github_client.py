@@ -85,13 +85,16 @@ class GitHubClient:
         )
         logger.debug(f"Branch created: {branch_name}")
 
-    def commit_and_push(self, work_dir: str, branch: str, message: str) -> None:
+    def commit_and_push(
+        self, work_dir: str, branch: str, message: str, issue_key: str
+    ) -> None:
         """Stage all changes, commit, and push to remote.
 
         Args:
             work_dir: Path to the git repository.
             branch: Branch name to push.
             message: Commit message.
+            issue_key: Jira issue key for logging.
 
         Raises:
             subprocess.CalledProcessError: If any git command fails.
@@ -104,7 +107,7 @@ class GitHubClient:
             capture_output=True,
         )
 
-        logger.info(f"Committing: {message}")
+        logger.info(f"Committing changes for {issue_key}")
         subprocess.run(
             ["git", "commit", "-m", message],
             cwd=work_dir,

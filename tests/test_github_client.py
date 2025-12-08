@@ -73,7 +73,8 @@ class TestGitHubClient:
         client.commit_and_push(
             work_dir="/tmp/test-repo",
             branch="ai/fix-TEST-123",
-            message="fix: resolve orphaned recipes issue"
+            message="fix: resolve orphaned recipes issue",
+            issue_key="TEST-123",
         )
 
         calls = [str(c) for c in mock_run.call_args_list]
