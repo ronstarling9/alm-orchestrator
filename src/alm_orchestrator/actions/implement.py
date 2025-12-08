@@ -4,7 +4,8 @@ import os
 from alm_orchestrator.actions.base import BaseAction
 
 
-# Branch and commit conventions for features
+# Label and conventions for features
+LABEL_IMPLEMENT = "ai-implement"
 BRANCH_PREFIX_FEATURE = "feature-"
 COMMIT_PREFIX_FEAT = "feat: "
 
@@ -14,7 +15,7 @@ class ImplementAction(BaseAction):
 
     @property
     def label(self) -> str:
-        return "ai-implement"
+        return LABEL_IMPLEMENT
 
     def execute(self, issue, jira_client, github_client, claude_executor) -> str:
         """Execute feature implementation and create PR.

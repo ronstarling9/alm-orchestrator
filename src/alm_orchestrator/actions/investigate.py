@@ -3,13 +3,15 @@
 import os
 from alm_orchestrator.actions.base import BaseAction
 
+LABEL_INVESTIGATE = "ai-investigate"
+
 
 class InvestigateAction(BaseAction):
     """Handles ai-investigate label - performs root cause analysis."""
 
     @property
     def label(self) -> str:
-        return "ai-investigate"
+        return LABEL_INVESTIGATE
 
     def execute(self, issue, jira_client, github_client, claude_executor) -> str:
         """Execute root cause investigation.

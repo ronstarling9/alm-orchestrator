@@ -5,13 +5,15 @@ import os
 from alm_orchestrator.actions.base import BaseAction
 from alm_orchestrator.utils.pr_extraction import find_pr_in_texts
 
+LABEL_CODE_REVIEW = "ai-code-review"
+
 
 class CodeReviewAction(BaseAction):
     """Handles ai-code-review label - performs code review on PR."""
 
     @property
     def label(self) -> str:
-        return "ai-code-review"
+        return LABEL_CODE_REVIEW
 
     def execute(self, issue, jira_client, github_client, claude_executor) -> str:
         """Execute code review on PR.

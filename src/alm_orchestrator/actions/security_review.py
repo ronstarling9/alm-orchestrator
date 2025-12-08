@@ -5,13 +5,15 @@ import os
 from alm_orchestrator.actions.base import BaseAction
 from alm_orchestrator.utils.pr_extraction import find_pr_in_texts
 
+LABEL_SECURITY_REVIEW = "ai-security-review"
+
 
 class SecurityReviewAction(BaseAction):
     """Handles ai-security-review label - performs security review on PR."""
 
     @property
     def label(self) -> str:
-        return "ai-security-review"
+        return LABEL_SECURITY_REVIEW
 
     def execute(self, issue, jira_client, github_client, claude_executor) -> str:
         """Execute security review on PR.

@@ -3,13 +3,15 @@
 import os
 from alm_orchestrator.actions.base import BaseAction
 
+LABEL_IMPACT = "ai-impact"
+
 
 class ImpactAction(BaseAction):
     """Handles ai-impact label - performs impact analysis."""
 
     @property
     def label(self) -> str:
-        return "ai-impact"
+        return LABEL_IMPACT
 
     def execute(self, issue, jira_client, github_client, claude_executor) -> str:
         """Execute impact analysis.

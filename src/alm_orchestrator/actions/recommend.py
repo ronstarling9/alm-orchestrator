@@ -6,13 +6,15 @@ from alm_orchestrator.actions.base import BaseAction
 
 logger = logging.getLogger(__name__)
 
+LABEL_RECOMMEND = "ai-recommend"
+
 
 class RecommendAction(BaseAction):
     """Handles ai-recommend label - suggests approaches."""
 
     @property
     def label(self) -> str:
-        return "ai-recommend"
+        return LABEL_RECOMMEND
 
     def execute(self, issue, jira_client, github_client, claude_executor) -> str:
         """Execute recommendation generation.
