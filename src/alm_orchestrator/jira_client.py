@@ -289,6 +289,25 @@ class JiraClient:
             for c in sorted_comments
         ]
 
+    def get_comment_by_header(self, issue_key: str, header: str) -> Optional[str]:
+        """Get the most recent comment from this service account matching a header.
+
+        Args:
+            issue_key: The issue key (e.g., "TEST-123").
+            header: The header text the comment should start with.
+
+        Returns:
+            The comment body if found, None otherwise.
+        """
+        comments = self.get_comments(issue_key)
+        for comment in comments:
+            if (
+                comment["author_id"] == self._account_id
+                and comment["body"].startswith(header)
+            ):
+                return comment["body"]
+        return None
+
     def get_investigation_comment(self, issue_key: str) -> Optional[str]:
         """Get the most recent investigation comment from this service account.
 
