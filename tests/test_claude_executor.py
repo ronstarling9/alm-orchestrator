@@ -71,6 +71,23 @@ class TestClaudeExecutor:
         call_args = mock_run.call_args
         assert call_args[1]["timeout"] == 300
 
+    def test_execute_uses_default_timeout(self, mocker, prompts_dir, work_dir):
+        """Verify default timeout is used when none specified."""
+        from alm_orchestrator.config import DEFAULT_CLAUDE_TIMEOUT_SECONDS
+
+        mock_run = mocker.patch("subprocess.run")
+        mock_run.return_value = MagicMock(
+            returncode=0,
+            stdout=mock_json_response("Done"),
+            stderr=""
+        )
+
+        executor = ClaudeExecutor(prompts_dir=str(prompts_dir))
+        executor.execute(work_dir=str(work_dir), prompt="Do something", action="investigate")
+
+        call_args = mock_run.call_args
+        assert call_args[1]["timeout"] == DEFAULT_CLAUDE_TIMEOUT_SECONDS
+
     def test_execute_handles_nonzero_exit(self, mocker, prompts_dir, work_dir):
         mock_run = mocker.patch("subprocess.run")
         mock_run.return_value = MagicMock(

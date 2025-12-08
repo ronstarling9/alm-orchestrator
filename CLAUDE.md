@@ -107,6 +107,7 @@ Environment variables loaded from `.env`:
 - `GITHUB_TOKEN`, `GITHUB_REPO` - GitHub PAT and repo in `owner/repo` format
 - `ANTHROPIC_API_KEY` (optional if using Vertex AI)
 - `POLL_INTERVAL_SECONDS` (default: 30)
+- `CLAUDE_TIMEOUT_SECONDS` - Claude Code CLI timeout in seconds (default: 600)
 
 #### Creating Jira OAuth 2.0 Credentials
 

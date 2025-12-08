@@ -9,6 +9,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
 
+from alm_orchestrator.config import DEFAULT_CLAUDE_TIMEOUT_SECONDS
+
 logger = logging.getLogger(__name__)
 
 
@@ -30,8 +32,6 @@ class ClaudeResult:
 class ClaudeExecutor:
     """Executes Claude Code CLI commands in headless mode."""
 
-    DEFAULT_TIMEOUT_SECONDS = 600  # 10 minutes
-
     def __init__(
         self,
         prompts_dir: str,
@@ -45,7 +45,7 @@ class ClaudeExecutor:
                            Defaults to 600 seconds (10 minutes).
         """
         self._prompts_dir = Path(prompts_dir)
-        self._timeout = timeout_seconds or self.DEFAULT_TIMEOUT_SECONDS
+        self._timeout = timeout_seconds or DEFAULT_CLAUDE_TIMEOUT_SECONDS
 
     def _install_sandbox_settings(self, work_dir: str, action: str) -> None:
         """Install sandbox settings for an action to the working directory.

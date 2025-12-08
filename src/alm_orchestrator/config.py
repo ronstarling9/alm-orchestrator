@@ -12,6 +12,7 @@ class ConfigError(Exception):
 
 # Default values
 DEFAULT_POLL_INTERVAL_SECONDS = 30
+DEFAULT_CLAUDE_TIMEOUT_SECONDS = 600  # 10 minutes
 DEFAULT_ATLASSIAN_TOKEN_URL = "https://auth.atlassian.com/oauth/token"
 DEFAULT_ATLASSIAN_RESOURCES_URL = "https://api.atlassian.com/oauth/token/accessible-resources"
 
@@ -27,6 +28,7 @@ class Config:
     jira_client_id: str
     jira_client_secret: str
     poll_interval_seconds: int = DEFAULT_POLL_INTERVAL_SECONDS
+    claude_timeout_seconds: int = DEFAULT_CLAUDE_TIMEOUT_SECONDS
     anthropic_api_key: Optional[str] = None
     atlassian_token_url: str = DEFAULT_ATLASSIAN_TOKEN_URL
     atlassian_resources_url: str = DEFAULT_ATLASSIAN_RESOURCES_URL
@@ -67,6 +69,12 @@ class Config:
         except ValueError:
             raise ConfigError(f"POLL_INTERVAL_SECONDS must be an integer, got: {poll_interval}")
 
+        claude_timeout = os.getenv("CLAUDE_TIMEOUT_SECONDS", str(DEFAULT_CLAUDE_TIMEOUT_SECONDS))
+        try:
+            claude_timeout_int = int(claude_timeout)
+        except ValueError:
+            raise ConfigError(f"CLAUDE_TIMEOUT_SECONDS must be an integer, got: {claude_timeout}")
+
         return cls(
             jira_url=os.environ["JIRA_URL"],
             jira_project_key=os.environ["JIRA_PROJECT_KEY"],
@@ -75,6 +83,7 @@ class Config:
             github_token=os.environ["GITHUB_TOKEN"],
             github_repo=os.environ["GITHUB_REPO"],
             poll_interval_seconds=poll_interval_int,
+            claude_timeout_seconds=claude_timeout_int,
             anthropic_api_key=os.getenv("ANTHROPIC_API_KEY"),
             atlassian_token_url=os.getenv(
                 "ATLASSIAN_TOKEN_URL",

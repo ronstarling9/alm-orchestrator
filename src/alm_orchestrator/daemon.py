@@ -31,7 +31,10 @@ class Daemon:
         # Initialize clients
         self._jira = JiraClient(config)
         self._github = GitHubClient(config)
-        self._claude = ClaudeExecutor(prompts_dir=prompts_dir)
+        self._claude = ClaudeExecutor(
+            prompts_dir=prompts_dir,
+            timeout_seconds=config.claude_timeout_seconds
+        )
 
         # Auto-discover and register all actions
         self._router = discover_actions(prompts_dir)

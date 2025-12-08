@@ -23,6 +23,7 @@ class TestConfig:
         assert config.github_repo == "owner/repo"
         assert config.anthropic_api_key == "sk-ant-test"
         assert config.poll_interval_seconds == 30  # default
+        assert config.claude_timeout_seconds == 600  # default
 
     def test_custom_poll_interval(self, monkeypatch):
         monkeypatch.setenv("JIRA_URL", "https://test.atlassian.net")
@@ -37,6 +38,33 @@ class TestConfig:
         config = Config.from_env()
 
         assert config.poll_interval_seconds == 10
+
+    def test_custom_claude_timeout(self, monkeypatch):
+        monkeypatch.setenv("JIRA_URL", "https://test.atlassian.net")
+        monkeypatch.setenv("JIRA_CLIENT_ID", "test-client-id")
+        monkeypatch.setenv("JIRA_CLIENT_SECRET", "test-client-secret")
+        monkeypatch.setenv("JIRA_PROJECT_KEY", "TEST")
+        monkeypatch.setenv("GITHUB_TOKEN", "ghp_test")
+        monkeypatch.setenv("GITHUB_REPO", "owner/repo")
+        monkeypatch.setenv("CLAUDE_TIMEOUT_SECONDS", "900")
+
+        config = Config.from_env()
+
+        assert config.claude_timeout_seconds == 900
+
+    def test_invalid_claude_timeout_raises_error(self, monkeypatch):
+        monkeypatch.setenv("JIRA_URL", "https://test.atlassian.net")
+        monkeypatch.setenv("JIRA_CLIENT_ID", "test-client-id")
+        monkeypatch.setenv("JIRA_CLIENT_SECRET", "test-client-secret")
+        monkeypatch.setenv("JIRA_PROJECT_KEY", "TEST")
+        monkeypatch.setenv("GITHUB_TOKEN", "ghp_test")
+        monkeypatch.setenv("GITHUB_REPO", "owner/repo")
+        monkeypatch.setenv("CLAUDE_TIMEOUT_SECONDS", "not-a-number")
+
+        with pytest.raises(ConfigError) as exc_info:
+            Config.from_env()
+
+        assert "CLAUDE_TIMEOUT_SECONDS must be an integer" in str(exc_info.value)
 
     def test_raises_on_missing_required(self, monkeypatch):
         # Clear all env vars
