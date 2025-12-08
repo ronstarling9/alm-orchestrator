@@ -52,11 +52,23 @@ ALM Orchestrator is a daemon that polls Jira for issues with AI labels, invokes 
 Actions are auto-discovered from `src/alm_orchestrator/actions/`. To add a new action:
 
 1. Create `actions/{name}.py` with a class extending `BaseAction`
-2. Define `label` property as `"ai-{name}"`
-3. Create `prompts/{name}.md` template
-4. Restart daemon — auto-discovered
+2. Define label as a module constant (e.g., `LABEL_MYACTION = "ai-myaction"`)
+3. Return the constant from the `label` property
+4. Create `prompts/{name}.md` template
+5. Restart daemon — auto-discovered
 
 Label-to-template convention: `ai-investigate` → `prompts/investigate.md`
+
+### Action Chaining
+
+Some actions automatically include context from prior actions on the same issue:
+
+| Action | Uses Context From |
+|--------|-------------------|
+| `ai-recommend` | `ai-investigate` results |
+| `ai-fix` | `ai-investigate` and `ai-recommend` results |
+
+Context is fetched via `JiraClient.get_investigation_comment()` and `get_recommendation_comment()`, which match by comment header and service account ID.
 
 ### Supported Labels
 

@@ -23,6 +23,22 @@ A Python daemon that integrates Jira, Claude Code, and GitHub to automate AI-pow
 
 *Requires PR reference in issue. See [Specifying a Pull Request](#specifying-a-pull-request).
 
+### Action Chaining
+
+Actions can build on prior analysis. When certain actions run, they automatically include context from earlier actions:
+
+| Action | Uses Context From |
+|--------|-------------------|
+| `ai-recommend` | `ai-investigate` results |
+| `ai-fix` | `ai-investigate` and `ai-recommend` results |
+
+This enables a workflow like:
+1. Add `ai-investigate` → posts root cause analysis
+2. Add `ai-recommend` → uses investigation, posts recommendations
+3. Add `ai-fix` → uses both, creates informed PR
+
+Context is matched by comment header and service account, so only the orchestrator's own prior analysis is used.
+
 ### Specifying a Pull Request
 
 The `ai-code-review` and `ai-security-review` labels require a PR reference
@@ -115,12 +131,13 @@ python main.py -v
 
 ```python
 from alm_orchestrator.actions.base import BaseAction
-from alm_orchestrator.claude_executor import ClaudeExecutor
+
+LABEL_MYACTION = "ai-myaction"
 
 class MyAction(BaseAction):
     @property
     def label(self) -> str:
-        return "ai-myaction"
+        return LABEL_MYACTION
 
     def execute(self, issue, jira_client, github_client, claude_executor) -> str:
         # Your implementation here
