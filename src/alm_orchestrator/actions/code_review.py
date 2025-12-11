@@ -86,6 +86,7 @@ class CodeReviewAction(BaseAction):
                 f"{complete_header}\n"
                 f"{'=' * len(complete_header)}\n\n"
                 f"Review posted to PR #{pr_number}"
+                f"\n\n---\n_Cost: ${result.cost_usd:.4f}_"
             )
             jira_client.remove_label(issue_key, self.label)
 

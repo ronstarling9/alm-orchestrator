@@ -127,7 +127,12 @@ class TestSecurityReviewPRInComments:
     @pytest.fixture
     def mock_claude_executor(self):
         executor = MagicMock()
-        executor.execute_with_template.return_value = MagicMock(content="Review content")
+        executor.execute_with_template.return_value = ClaudeResult(
+            content="Review content",
+            cost_usd=0.05,
+            duration_ms=5000,
+            session_id="test-session"
+        )
         return executor
 
     def test_finds_pr_in_comments_when_not_in_description(

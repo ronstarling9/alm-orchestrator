@@ -68,7 +68,10 @@ class RecommendAction(BaseAction):
             )
 
             header = "RECOMMENDATIONS"
-            comment = f"{header}\n{'=' * len(header)}\n\n{result.content}"
+            comment = (
+                f"{header}\n{'=' * len(header)}\n\n{result.content}"
+                f"\n\n---\n_Cost: ${result.cost_usd:.4f}_"
+            )
             jira_client.add_comment(issue_key, comment)
             jira_client.remove_label(issue_key, self.label)
 

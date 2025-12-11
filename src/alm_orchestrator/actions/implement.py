@@ -92,6 +92,7 @@ class ImplementAction(BaseAction):
                 f"{'=' * len(header)}\n\n"
                 f"Pull Request: {pr.html_url}\n\n"
                 f"Review the changes and merge when ready."
+                f"\n\n---\n_Cost: ${result.cost_usd:.4f}_"
             )
             jira_client.add_comment(issue_key, comment)
             jira_client.remove_label(issue_key, self.label)
