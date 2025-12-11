@@ -86,9 +86,10 @@ class Daemon:
                     except Exception as e:
                         logger.error(f"Error processing {issue.key}/{label}: {e}")
                         # Post error to Jira as comment (fail fast)
+                        header = "ACTION FAILED"
                         self._jira.add_comment(
                             issue.key,
-                            f"## AI Action Failed\n\n**Label:** {label}\n**Error:** {str(e)}"
+                            f"{header}\n{'=' * len(header)}\n\nLabel: {label}\n\nCheck logs for details."
                         )
                     finally:
                         # Always remove processing label
