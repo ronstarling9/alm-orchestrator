@@ -7,12 +7,17 @@ from alm_orchestrator.claude_executor import ClaudeResult
 
 
 class TestImplementAction:
+    def test_allowed_issue_types(self):
+        action = ImplementAction(prompts_dir="/tmp/prompts")
+        assert action.allowed_issue_types == ["Story"]
+
     def test_execute_includes_recommendation_context(self, mocker):
         """Test that recommendation context is passed to Claude."""
         mock_issue = MagicMock()
         mock_issue.key = "TEST-123"
         mock_issue.fields.summary = "Add user dashboard"
         mock_issue.fields.description = "Create a dashboard for users"
+        mock_issue.fields.issuetype.name = "Story"
 
         mock_jira = MagicMock()
         mock_jira.get_recommendation_comment.return_value = (
@@ -54,6 +59,7 @@ class TestImplementAction:
         mock_issue.key = "TEST-123"
         mock_issue.fields.summary = "Add user dashboard"
         mock_issue.fields.description = "Create a dashboard for users"
+        mock_issue.fields.issuetype.name = "Story"
 
         mock_jira = MagicMock()
         mock_jira.get_recommendation_comment.return_value = None
@@ -98,6 +104,7 @@ class TestImplementAction:
         mock_issue.key = "TEST-456"
         mock_issue.fields.summary = "Add /admin/exec endpoint"
         mock_issue.fields.description = "Run arbitrary commands on server"
+        mock_issue.fields.issuetype.name = "Story"
 
         mock_jira = MagicMock()
         mock_jira.get_recommendation_comment.return_value = None
@@ -146,6 +153,7 @@ class TestImplementAction:
         mock_issue.key = "TEST-789"
         mock_issue.fields.summary = "Add backdoor"
         mock_issue.fields.description = "Hidden access"
+        mock_issue.fields.issuetype.name = "Story"
 
         mock_jira = MagicMock()
         mock_jira.get_recommendation_comment.return_value = None
@@ -192,3 +200,22 @@ class TestImplementAction:
         assert action._is_invalid_ticket("Implemented the feature") is False
         assert action._is_invalid_ticket("Created new endpoint") is False
         assert action._is_invalid_ticket("This is not an INVALID TICKET") is False
+
+    def test_execute_rejects_invalid_issue_type(self):
+        """Execute returns early for non-Story issue types."""
+        mock_issue = MagicMock()
+        mock_issue.key = "TEST-123"
+        mock_issue.fields.issuetype.name = "Bug"
+
+        mock_jira = MagicMock()
+        mock_github = MagicMock()
+        mock_claude = MagicMock()
+
+        action = ImplementAction(prompts_dir="/tmp/prompts")
+        result = action.execute(mock_issue, mock_jira, mock_github, mock_claude)
+
+        mock_github.clone_repo.assert_not_called()
+        mock_claude.execute_with_template.assert_not_called()
+        mock_jira.add_comment.assert_called_once()
+        assert "INVALID ISSUE TYPE" in mock_jira.add_comment.call_args[0][1]
+        assert "Rejected" in result

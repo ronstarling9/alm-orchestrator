@@ -20,6 +20,10 @@ class ImplementAction(BaseAction):
     def label(self) -> str:
         return LABEL_IMPLEMENT
 
+    @property
+    def allowed_issue_types(self) -> list[str]:
+        return ["Story"]
+
     def execute(self, issue, jira_client, github_client, claude_executor) -> str:
         """Execute feature implementation and create PR.
 
@@ -35,6 +39,10 @@ class ImplementAction(BaseAction):
         issue_key = issue.key
         summary = issue.fields.summary
         description = issue.fields.description or ""
+
+        # Validate issue type
+        if not self.validate_issue_type(issue, jira_client):
+            return f"Rejected {issue_key}: invalid issue type"
 
         # Check for prior analysis results
         prior_analysis_section = self._build_prior_analysis_section(
