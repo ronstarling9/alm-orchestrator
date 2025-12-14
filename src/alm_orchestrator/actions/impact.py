@@ -13,6 +13,10 @@ class ImpactAction(BaseAction):
     def label(self) -> str:
         return LABEL_IMPACT
 
+    @property
+    def allowed_issue_types(self) -> list[str]:
+        return ["Bug", "Story"]
+
     def execute(self, issue, jira_client, github_client, claude_executor) -> str:
         """Execute impact analysis.
 
@@ -28,6 +32,10 @@ class ImpactAction(BaseAction):
         issue_key = issue.key
         summary = issue.fields.summary
         description = issue.fields.description or ""
+
+        # Validate issue type
+        if not self.validate_issue_type(issue, jira_client):
+            return f"Rejected {issue_key}: invalid issue type"
 
         work_dir = github_client.clone_repo()
 
