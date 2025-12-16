@@ -138,19 +138,20 @@ Merge:          Approved by @jsmith
 
 ### What Good Looks Like
 
-**Secrets Blocked:**
-```json
-"deny": ["Read(.env)", "Read(.env.*)", "Read(**/.env)", "Read(**/.env.*)"]
-```
-
-**Read-Only Sandbox:**
-```json
-{ "allow": ["Read(**)", "Glob(**)", "Grep(**)"], "deny": ["Write(**)", "Edit(**)", "Bash(curl:*)"] }
-```
-
-**Agent Isolation:**
+**Output Scanning:** Scan AI output for secrets before use
 ```python
-result = subprocess.run(["claude", "-p", prompt], cwd=work_dir, capture_output=True, timeout=600)
+if secrets_detector.scan(ai_output):
+    raise SecurityError("AI output contains secrets")
+```
+
+**Agent Isolation:** Run agent in separate process with restricted scope
+```python
+result = subprocess.run(["ai-agent", "-p", prompt], cwd=work_dir, capture_output=True, timeout=600)
+```
+
+**Sandboxing:** Restrict permissions per task type
+```json
+{ "allow": ["Read(**)", "Glob(**)"], "deny": ["Write(**)", "Bash(curl:*)", "Read(.env*)"] }
 ```
 
 ---
