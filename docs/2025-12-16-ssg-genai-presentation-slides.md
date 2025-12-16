@@ -140,8 +140,18 @@ Merge:          Approved by @jsmith
 
 **Output Scanning:** Scan AI output for secrets before use
 ```python
-if secrets_detector.scan(ai_output):
-    raise SecurityError("AI output contains secrets")
+CREDENTIAL_PATTERNS = [
+    r"AKIA[0-9A-Z]{16}",                         # AWS Access Key
+    r"-----BEGIN .* PRIVATE KEY-----",            # Private keys
+    r"eyJ[a-zA-Z0-9_-]*\.eyJ.*\.[a-zA-Z0-9_-]*",  # JWTs
+]
+
+def has_high_entropy_strings(text: str) -> bool:
+    """Detect random-looking strings (possible secrets)."""
+    for word in re.findall(r"[a-zA-Z0-9_\-]{20,}", text):
+        if shannon_entropy(word) > 4.5:
+            return True
+    return False
 ```
 
 **Agent Isolation:** Run agent in separate process with restricted scope
