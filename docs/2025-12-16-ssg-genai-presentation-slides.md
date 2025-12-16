@@ -19,7 +19,7 @@ Ron Starling | CTO Advisor | Software Strategy Group
 
 > "Is this company using AI effectively to build software?"
 
-**The problem:** Most targets claim they're "using AI" — but lack a framework to prove it.
+**The problem:** Most targets claim they're "using AI" — but we lack a framework to assess it.
 
 **The opportunity:** Structured diligence questions reveal actual maturity vs. marketing.
 
