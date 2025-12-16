@@ -30,7 +30,7 @@ Ron Starling | CTO Advisor | Software Strategy Group
 | Level | Name | Description | Example |
 |-------|------|-------------|---------|
 | **1** | Assisted | Autocomplete, line-by-line, developer-initiated | GitHub Copilot |
-| **2** | Agentic | AI takes on tasks, multi-file changes, human reviews output | Claude Code, Cursor Agent |
+| **2** | Agentic | AI takes on tasks, multi-file changes, human reviews output | Cursor, Windsurf, agentic IDEs |
 | **3** | Orchestrated | AI integrated into ALM workflows, triggered by events | Jira, Git, TCM + AI integration |
 
 **Key insight:** Most targets are at Level 1 and don't know it.
@@ -108,9 +108,9 @@ Ron Starling | CTO Advisor | Software Strategy Group
 ```
 PR #847: Fix null pointer in payment service
 ──────────────────────────────────────────
-Created by:     claude-agent
+Created by:     ai-agent
 Triggered by:   Jira PROJ-1234 [ai-fix]
-Reviews:        ✓ @claude-code-review (AI)
+Reviews:        ✓ @ai-code-review (AI)
                 ✓ @jsmith (human)
 CI Status:      ✓ tests passing
 Merge:          Approved by @jsmith
@@ -120,70 +120,42 @@ Merge:          Approved by @jsmith
 
 ---
 
-## Slide 8: Security Questions (1 of 2)
+## Slide 8: Security Questions
 
-### What to Ask
+| Data & Secrets | Permissions & Detection |
+|----------------|------------------------|
+| 7. **"How do you prevent AI from leaking secrets?"** | 10. **"What permissions does the AI have?"** |
+| 🔴 "We trust the tool" | 🔴 Developer-level access to everything |
+| 🟢 Sandboxing, secrets scanning on output | 🟢 Scoped to task, sandboxed filesystem/network |
+| | |
+| 8. **"What data is sent to AI providers?"** | 11. **"How do you detect AI-introduced vulnerabilities?"** |
+| 🔴 "Don't know" | 🔴 "Same as regular code review" |
+| 🟢 Clear policy, no customer data without approval | 🟢 Automated security scans, specific review protocols |
+| | |
+| 9. **"How do you protect against prompt injection?"** | |
+| 🔴 "What's prompt injection?" | |
+| 🟢 Input/output separation, output validation, limited blast radius | |
 
-7. **"How do you prevent AI from leaking secrets or credentials?"**
-   - 🔴 Red flag: "We trust the tool"
-   - 🟢 Green flag: Sandboxing, secrets scanning on output
+### What Good Looks Like
 
-8. **"What data is sent to AI providers, and how is it classified?"**
-   - 🔴 Red flag: "Don't know"
-   - 🟢 Green flag: Clear policy, no customer data without approval
-
-9. **"How do you protect against prompt injection?"**
-   - 🔴 Red flag: "What's prompt injection?"
-   - 🟢 Green flag: Input/output separation, output validation, limited blast radius
-
-### What Good Looks Like: Secrets Blocked
-
+**Secrets Blocked:**
 ```json
-"deny": [
-  "Read(.env)", "Read(.env.*)",
-  "Read(**/.env)", "Read(**/.env.*)"
-]
+"deny": ["Read(.env)", "Read(.env.*)", "Read(**/.env)", "Read(**/.env.*)"]
 ```
 
----
-
-## Slide 9: Security Questions (2 of 2)
-
-### What to Ask
-
-10. **"What permissions does the AI have in your environment?"**
-    - 🔴 Red flag: Developer-level access to everything
-    - 🟢 Green flag: Scoped to task, sandboxed filesystem/network
-
-11. **"How do you detect if AI-generated code introduces vulnerabilities?"**
-    - 🔴 Red flag: "Same as regular code review"
-    - 🟢 Green flag: Automated security scans, specific review protocols
-
-### What Good Looks Like: Read-Only Sandbox
-
+**Read-Only Sandbox:**
 ```json
-{
-  "permissions": {
-    "allow": ["Read(**)", "Glob(**)", "Grep(**)", "Bash(git log:*)"],
-    "deny": ["Write(**)", "Edit(**)", "WebFetch", "Bash(curl:*)"]
-  }
-}
+{ "allow": ["Read(**)", "Glob(**)", "Grep(**)"], "deny": ["Write(**)", "Edit(**)", "Bash(curl:*)"] }
 ```
 
-### What Good Looks Like: Agent Isolation
-
+**Agent Isolation:**
 ```python
-result = subprocess.run(
-    ["claude", "-p", prompt, "--output-format", "json"],
-    cwd=work_dir,        # Restricted to cloned repo
-    capture_output=True,
-    timeout=self._timeout,
-)
+result = subprocess.run(["claude", "-p", prompt], cwd=work_dir, capture_output=True, timeout=600)
 ```
 
 ---
 
-## Slide 10: Measurement Questions
+## Slide 9: Measurement Questions
 
 ### What to Ask
 
@@ -197,7 +169,7 @@ result = subprocess.run(
 
 ---
 
-## Slide 11: Red Flags & Green Flags Summary
+## Slide 10: Red Flags & Green Flags Summary
 
 | Area | 🔴 Red Flag | 🟢 Green Flag |
 |------|-------------|---------------|
@@ -210,7 +182,7 @@ result = subprocess.run(
 
 ---
 
-## Slide 12: Key Takeaways
+## Slide 11: Key Takeaways
 
 ### The Framework
 - **Level 1 (Assisted)** → Table stakes, no moat
