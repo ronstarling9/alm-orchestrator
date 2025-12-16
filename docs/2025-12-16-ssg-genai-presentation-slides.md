@@ -157,13 +157,16 @@ def has_high_entropy_strings(text: str) -> bool:
 
 ### What to Ask
 
-12. **"How do you measure AI's impact on velocity?"**
-    - 🔴 Red flag: Anecdotes ("developers love it")
-    - 🟢 Green flag: Metrics (cycle time, PR throughput, defect rates)
+12. **"How do you measure AI's impact?"**
+    - 🔴 Red flag: Vanity metrics ("lines of code generated", "suggestions accepted")
+    - ⚠️ Watch: Velocity-only metrics (cycle time, PR throughput)
+    - 🟢 Green flag: Business outcomes (time-to-feature, defect escape rate, customer-facing quality)
 
-13. **"What's the adoption rate across teams?"**
-    - 🔴 Red flag: "A few power users"
-    - 🟢 Green flag: Org-wide rollout with training
+13. **"What behavior do your AI metrics encourage?"**
+    - 🔴 Red flag: Speed at all costs
+    - 🟢 Green flag: Balanced delivery + quality + value
+
+**Takeaway:** "Suggestions accepted" won't impress a customer. Measure delivery, quality, value — if AI is working, those improve.
 
 ---
 
