@@ -31,7 +31,7 @@ Ron Starling | CTO Advisor | Software Strategy Group
 |-------|------|-------------|---------|
 | **1** | Assisted | Autocomplete, line-by-line, developer-initiated | GitHub Copilot |
 | **2** | Agentic | AI takes on tasks, multi-file changes, human reviews output | Claude Code, Cursor Agent |
-| **3** | Orchestrated | AI integrated into ALM workflows, triggered by events | Jira label → AI investigation → PR |
+| **3** | Orchestrated | AI integrated into ALM workflows, triggered by events | Jira, Git, TCM + AI integration |
 
 **Key insight:** Most targets are at Level 1 and don't know it.
 
