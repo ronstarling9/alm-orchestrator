@@ -49,33 +49,17 @@ Ron Starling | CTO Advisor | Software Strategy Group
 
 ---
 
-## Slide 5: Tooling Questions
+## Slide 5: Tooling & Workflow Questions
 
-### What to Ask
-
-1. **"What AI coding tools are developers using?"**
-   - ⚠️ Watch: "Copilot" and nothing else
-   - 🟢 Green flag: Multiple tools, agentic options mentioned
-
-2. **"How are these tools provisioned and governed?"**
-   - 🔴 Red flag: Ad-hoc, individual licenses, no visibility
-   - 🟢 Green flag: Centralized provisioning, usage tracked
-
-**Takeaway:** Copilot is baseline — agentic tooling signals velocity ambition.
-
----
-
-## Slide 6: Workflow Integration Questions
-
-### What to Ask
-
-3. **"At what points in your SDLC does AI assist?"**
-   - 🔴 Red flag: Only code writing
-   - 🟢 Green flag: Code review, spec/plan writing, test case writing, test automation, defect analysis, documentation, investigation
-
-4. **"How do developers trigger AI assistance?"**
-   - 🔴 Red flag: Manually in IDE only
-   - 🟢 Green flag: Automated triggers from tickets, PRs, CI
+| Tooling | Workflow Integration |
+|---------|---------------------|
+| 1. **"What AI coding tools are developers using?"** | 3. **"At what points in your SDLC does AI assist?"** |
+| ⚠️ Watch: "Copilot" and nothing else | 🔴 Red flag: Only code writing |
+| 🟢 Green flag: Multiple tools, agentic options mentioned | 🟢 Green flag: Code review, spec/plan writing, test case writing, test automation, defect analysis, documentation, investigation |
+| | |
+| 2. **"How are these tools provisioned and governed?"** | 4. **"How do developers trigger AI assistance?"** |
+| 🔴 Red flag: Ad-hoc, individual licenses, no visibility | 🔴 Red flag: Manually in IDE only |
+| 🟢 Green flag: Centralized provisioning, usage tracked | 🟢 Green flag: Automated triggers from tickets, PRs, CI |
 
 ### What Level 3 Looks Like: Integration Triggers
 
@@ -90,7 +74,7 @@ Ron Starling | CTO Advisor | Software Strategy Group
 
 ---
 
-## Slide 7: Human-in-the-Loop Questions
+## Slide 6: Human-in-the-Loop Questions
 
 ### What to Ask
 
@@ -120,7 +104,7 @@ Merge:          Approved by @jsmith
 
 ---
 
-## Slide 8: Security Questions
+## Slide 7: Security Questions
 
 | Data & Secrets | Permissions & Detection |
 |----------------|------------------------|
@@ -167,7 +151,7 @@ with Ruleset(FSAccess.READ | FSAccess.WRITE | FSAccess.EXECUTE) as ruleset:
 
 ---
 
-## Slide 9: Measurement Questions
+## Slide 8: Measurement Questions
 
 ### What to Ask
 
@@ -181,7 +165,7 @@ with Ruleset(FSAccess.READ | FSAccess.WRITE | FSAccess.EXECUTE) as ruleset:
 
 ---
 
-## Slide 10: Red Flags & Green Flags Summary
+## Slide 9: Red Flags & Green Flags Summary
 
 | Area | 🔴 Red Flag | 🟢 Green Flag |
 |------|-------------|---------------|
@@ -194,7 +178,7 @@ with Ruleset(FSAccess.READ | FSAccess.WRITE | FSAccess.EXECUTE) as ruleset:
 
 ---
 
-## Slide 11: Key Takeaways
+## Slide 10: Key Takeaways
 
 ### The Framework
 - **Level 1 (Assisted)** → Table stakes, no moat
@@ -226,9 +210,9 @@ Companies that can't articulate their AI strategy beyond "we use Copilot" are at
 
 ### Timing Guide (15-20 min total)
 - Slides 1-4 (Framework): 4-5 min
-- Slides 5-7 (Workflow/Human-in-Loop): 4-5 min
-- Slides 8-9 (Security): 4-5 min
-- Slides 10-12 (Measurement/Summary): 3-4 min
+- Slides 5-6 (Tooling/Workflow/Human-in-Loop): 4-5 min
+- Slide 7 (Security): 4-5 min
+- Slides 8-10 (Measurement/Summary): 3-4 min
 
 ### Key Points to Emphasize
 - The gap between Level 1 and Level 2-3 is significant and most targets don't know it
