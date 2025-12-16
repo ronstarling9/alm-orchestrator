@@ -54,12 +54,14 @@ Ron Starling | CTO Advisor | Software Strategy Group
 ### What to Ask
 
 1. **"What AI coding tools are developers using?"**
-   - 🔴 Red flag: "Copilot" and nothing else
+   - ⚠️ Watch: "Copilot" and nothing else
    - 🟢 Green flag: Multiple tools, agentic options mentioned
 
 2. **"How are these tools provisioned and governed?"**
    - 🔴 Red flag: Ad-hoc, individual licenses, no visibility
    - 🟢 Green flag: Centralized provisioning, usage tracked
+
+**Takeaway:** Copilot is baseline — agentic tooling signals velocity ambition.
 
 ---
 
