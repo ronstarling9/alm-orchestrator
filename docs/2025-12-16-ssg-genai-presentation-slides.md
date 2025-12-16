@@ -39,11 +39,11 @@ Ron Starling | CTO Advisor | Software Strategy Group
 
 ## Slide 4: Why This Matters for Valuation
 
-| Level | Valuation Signal |
-|-------|------------------|
-| **Level 1** | Table stakes — no differentiation |
-| **Level 2** | Engineering leadership, velocity advantage |
-| **Level 3** | Scalability without linear headcount growth |
+| Level | Valuation Signal | OSM Proposal |
+|-------|------------------|--------------|
+| **Level 1** | Table stakes — no differentiation | 2-3 |
+| **Level 2** | Engineering leadership, velocity advantage | 3-4 |
+| **Level 3** | Scalability without linear headcount growth | 4-5 |
 
 **Diligence implication:** Level 2-3 adoption signals a more capital-efficient engineering organization.
 
