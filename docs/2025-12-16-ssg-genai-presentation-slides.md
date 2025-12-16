@@ -71,7 +71,7 @@ Ron Starling | CTO Advisor | Software Strategy Group
 
 3. **"At what points in your SDLC does AI assist?"**
    - 🔴 Red flag: Only code writing
-   - 🟢 Green flag: Code review, testing, documentation, investigation
+   - 🟢 Green flag: Code review, spec/plan writing, test case writing, test automation, defect analysis, documentation, investigation
 
 4. **"How do developers trigger AI assistance?"**
    - 🔴 Red flag: Manually in IDE only
@@ -86,6 +86,8 @@ Labels trigger specific AI workflows:
 | ai-fix         | Bug fix implementation  |
 | ai-code-review | Automated code review   |
 ```
+
+**Takeaway:** Breadth of AI integration signals organizational maturity — narrow usage just shifts the bottleneck.
 
 ---
 
